@@ -1,105 +1,236 @@
 <template>
-  <div id="app">
+  <div id="hangeul">
     <div id="inputField">
       <h2>Mikä on nimesi koreaksi?</h2>
-      <br />
-      <input type="text" v-model="textConvert" />
-      <br />
-      <input type="submit" value="Submit" v-on:click="changeText" />
-      <br />
-      <br />
-      {{ text }}
+      <div class="inputOne">
+        <input type="text" v-model="textConvert" />
+      </div>
+      <div class="inputTwo">
+        <input type="submit" value="Lähetä" v-on:click="changeText" />
+      </div>
+      <div class="korName">
+        {{ text }}
+      </div>
     </div>
-    <Hangeul msg="Annyeonghaseyo!" />
+    <div class="component">
+      <Hangeul msg="Annyeonghaseyo!" />
+    </div>
   </div>
 </template>
 
 <script>
-import Hangeul from './components/Hangeul.vue'
-import * as Hangul from 'hangul-js';
+import Hangeul from "./components/Hangeul.vue";
+import * as Hangul from "hangul-js";
 
 export default {
-  name: 'app',
+  name: "hangeul",
   components: {
     Hangeul
   },
   data() {
     return {
-    textConvert: '',
-    text: '',
-    alphabet: {
-      'a': "ㅏ", 'ja': "ㅑ", 'o':'ㅓ', 'jo':'ㅕ', 3:'ㅗ', 4:'ㅛ', 'u':'ㅜ', 'ju':'ㅠ', 1: 'ㅡ', 'i':'ㅣ', 0:'ㅇ', 'e':'ㅔ', 'je':'ㅖ', 'ö':'ㅚ', 'vu':'ㅝ', 'va':'ㅘ', 'vo':'ㅝ', 'vi':'ㅟ', 'ä':'ㅐ', 've':'ㅞ',
-      'g':'ㄱ', 'n':'ㄴ','d':'ㄷ','r':'ㄹ', 'l':'ㄹ', 'm':'ㅁ', 'b':'ㅂ','s':'ㅅ', 'ng':'ㅇ', 'zh':'ㅈ', 'ch':'ㅊ', 
-      'k':'ㅋ', 't':'ㅌ', 'p':'ㅍ', 'h':'ㅎ',
-      'kk':'ㄲ', 'tt':'ㄸ', 'pp':'ㅃ', 'ss':'ㅆ'
-                }
-            }
+      textConvert: "",
+      text: "",
+      alphabet: {
+        a: "ㅏ",
+        o: "ㅓ",
+        å: "ㅓ",
+        u: "ㅜ",
+        e: "ㅔ",
+        i: "ㅣ",
+        y: "ㅣ",
+        1: "ㅡ",
+        0: "ㅇ",
+        ja: "ㅑ",
+        jo: "ㅕ",
+        ju: "ㅠ",
+        je: "ㅖ",
+        jä: "ㅒ",
+        jö: "ㅛ",
+        va: "ㅘ",
+        vo: "ㅝ",
+        vu: "ㅢ",
+        ve: "ㅞ",
+        vi: "ㅟ",
+        vä: "ㅙ",
+        vö: "ㅚ",
+        ä: "ㅐ",
+        ö: "ㅚ",
+        f: "ㅍ",
+        g: "ㄱ",
+        n: "ㄴ",
+        d: "ㄷ",
+        r: "ㄹ",
+        l: "ㄹ",
+        m: "ㅁ",
+        b: "ㅂ",
+        s: "ㅅ",
+        ng: "ㅇ",
+        zh: "ㅈ",
+        ch: "ㅊ",
+        k: "ㅋ",
+        t: "ㅌ",
+        p: "ㅍ",
+        h: "ㅎ",
+        kk: "ㄲ",
+        tt: "ㄸ",
+        pp: "ㅃ",
+        ss: "ㅆ"
+      }
+    };
   },
   methods: {
-      consonantTampering(string) {
-        const consReg = /([^aeiouöä])\1/g
+    consonantTampering(string) {
+      function charSplit(string) {
+        var arr = [],
+          l,
+          j = -1;
 
-        /*let nep = string.match(consReg).forEach(item => {
-          if (item == "kk" || item == "tt" || item == "pp" || item == "ss") {
-            return ("0")
+        for (var i = 0; i < string.length; i++) {
+          var c = string.charAt(i);
+
+          if (c == "l" && l == "l") {
+            arr[++j] = c;
           }
-        })*/
-        console.log(string)
-        console.log(string.match(consReg))
-        //console.log(nep)
+          if (c == "n" && l == "n") {
+            arr[++j] = c;
+          }
+          if (c == "m" && l == "m") {
+            arr[++j] = c;
+          } else if (l == c) {
+            arr[j] += c;
+          } else if (c == "g" && l == "n") {
+            arr[j] += c;
+          } else if (c == "i" && l == "v") {
+            arr[j] += c;
+          } else if (c == "a" && l == "v") {
+            arr[j] += c;
+          } else if (c == "e" && l == "v") {
+            arr[j] += c;
+          } else if (c == "o" && l == "v") {
+            arr[j] += c;
+          } else if (c == "u" && l == "v") {
+            arr[j] += c;
+          } else if (c == "ö" && l == "v") {
+            arr[j] += c;
+          } else if (c == "ä" && l == "v") {
+            arr[j] += c;
+          } else if (c == "a" && l == "j") {
+            arr[j] += c;
+          } else if (c == "e" && l == "j") {
+            arr[j] += c;
+          } else if (c == "i" && l == "j") {
+            arr[j] += c;
+          } else if (c == "o" && l == "j") {
+            arr[j] += c;
+          } else if (c == "u" && l == "j") {
+            arr[j] += c;
+          } else if (c == "ä" && l == "j") {
+            arr[j] += c;
+          } else if (c == "ö" && l == "j") {
+            arr[j] += c;
+          } else {
+            arr[++j] = c;
+          }
+          l = c;
 
-        return string
-      },
+          /* l==c ? arr[j] += c : arr[++j] = c; 
+            l=c;
+            c=='g' && l == 'n' ? arr[j] += c : arr[++j] = c;
+            l=c; */
+        }
+        return arr;
+      }
+      return charSplit(string);
+    },
 
-      modifyString(string) {
-          const doubleVowelReg = /[aeiouäö]{2}/ig
+    modifyString(string) {
+      const doubleVowelReg = /[aeiouäöy]{2,}/gi;
+      const consReg = /[^aeiouäöy]{2,}/gi;
 
-          console.log(string)
+      function addtoVowel(match) {   
+        if (match.length == 2) {
+          return match[0] + "0" + match[1];  
+        } else if (match.length == 3) { 
+          return match[0] + "0" + match[1] + "0" + match[2]; 
+        }
+      }
 
-          function addtoVowel(match) {
-            return ( match[0] + '0' + match[1])
+      function addIfConsonant(match) {
+        if (match.length == 2) {
+          if (match[0] === match[1]) {
+            return match;
+          } else if (match[0] === "r" && match[1] === "j") {
+            return match[0] + 1 + 0 + match[1];
+          } else if (match[0] === "r" && match[1] === "v") {
+            return match[0] + 1 + 0 + match[1];
+          } else if (match[0] === "l" && match[1] === "j") {
+            return match[0] + "l" + match[1];
+          } else if (match[0] === "l" && match[1] === "v") {
+            return match[0] + "l" + match[1];
+          } else if (match[0] === "n" && match[1] === "g") {
+            return match + 0;
+          } else if (
+            match[0] === "n" ||
+            match[0] === "p" ||
+            match[0] === "l" ||
+            match[0] === "m"
+          ) {
+            return match;
+          } else if (match === "ks") {
+            return match;
+          } else {
+            return match[0] + 1 + match[1];
           }
 
-          function isVowel(array) {
-            if ("aeiouäö".indexOf(array[0]) != -1) {
-              array = "0" + array
-            }
-            return array
+        } else if (match.length === 3) {
+          if (match[0] === 'r') {
+            return (match[0] + 1 + match[1] + match[2])
+          } else if (match[1] === 's') {
+            return (match[0] + match[1] + 1 + match[2]) 
+          } else {
+            return match
           }
-          let newArray = string.replace(doubleVowelReg, addtoVowel);
+        }
+      }
 
-          return this.consonantTampering(isVowel(newArray))
-       },
-      changeText() {
-      let hangulArray = []
-      let textToHangul = this.modifyString(this.textConvert.trim().toLowerCase()).split('').map(item => item);
+      function isVowel(string) {
+        if ("aeiouäöy".indexOf(string[0]) != -1) {
+          string = "0" + string;
+        }
+        return string;
+      }
+
+      let newStr = string
+        .replace(/\s/g, "")
+        .replace(doubleVowelReg, addtoVowel)
+        .replace(consReg, addIfConsonant)
+        .replace(/j/g, "0j")
+        .replace(/v/g, "0v");
+
+      return this.consonantTampering(isVowel(newStr));
+    },
+    changeText() {
+      let hangulArray = [];
+      let textToHangul = this.modifyString(
+        this.textConvert.trim().toLowerCase()
+      );
       let arrayOfKeys = Object.keys(this.alphabet);
 
-        for (let i = 0; i < textToHangul.length; i++) {
-          for (let key of arrayOfKeys) {
-            if (key === textToHangul[i]) {
-            hangulArray.push(this.alphabet[key])
-            }
+      for (let i = 0; i < textToHangul.length; i++) {
+        for (let key of arrayOfKeys) {
+          if (key === textToHangul[i]) {
+            hangulArray.push(this.alphabet[key]);
           }
-            }
-          console.log(hangulArray)
-          console.log(Hangul.assemble(hangulArray))
-          this.text = Hangul.assemble(hangulArray);
-
-          this.textConvert = ''
         }
+      }
 
+      this.text = Hangul.assemble(hangulArray);
+
+      this.textConvert = "";
+    }
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>
