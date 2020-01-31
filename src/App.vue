@@ -56,6 +56,7 @@ export default {
         vö: "ㅚ",
         ä: "ㅐ",
         ö: "ㅚ",
+        c: "ㅋ",
         f: "ㅍ",
         g: "ㄱ",
         n: "ㄴ",
@@ -80,8 +81,7 @@ export default {
     };
   },
   methods: {
-    consonantTampering(string) {
-      function charSplit(string) {
+    stringSplit(string) {
         var arr = [],
           l,
           j = -1;
@@ -91,12 +91,12 @@ export default {
 
           if (c == "l" && l == "l") {
             arr[++j] = c;
-          }
+          } else
           if (c == "n" && l == "n") {
             arr[++j] = c;
-          }
+          } else
           if (c == "m" && l == "m") {
-            arr[++j] = c;
+            arr[++j] = c;      
           } else if (l == c) {
             arr[j] += c;
           } else if (c == "g" && l == "n") {
@@ -133,20 +133,11 @@ export default {
             arr[++j] = c;
           }
           l = c;
-
-          /* l==c ? arr[j] += c : arr[++j] = c; 
-            l=c;
-            c=='g' && l == 'n' ? arr[j] += c : arr[++j] = c;
-            l=c; */
         }
+        console.log(arr)
         return arr;
-      }
-      return charSplit(string);
     },
-
     modifyString(string) {
-      const doubleVowelReg = /[aeiouäöy]{2,}/gi;
-      const consReg = /[^aeiouäöy]{2,}/gi;
 
       function addtoVowel(match) {   
         if (match.length == 2) {
@@ -164,6 +155,8 @@ export default {
             return match[0] + 1 + 0 + match[1];
           } else if (match[0] === "r" && match[1] === "v") {
             return match[0] + 1 + 0 + match[1];
+          } else if (match[0] === "r" && match[1] === "k") {
+            return match[0] + 1 + match[1];
           } else if (match[0] === "l" && match[1] === "j") {
             return match[0] + "l" + match[1];
           } else if (match[0] === "l" && match[1] === "v") {
@@ -174,7 +167,8 @@ export default {
             match[0] === "n" ||
             match[0] === "p" ||
             match[0] === "l" ||
-            match[0] === "m"
+            match[0] === "m" ||
+            match[0] === 't'
           ) {
             return match;
           } else if (match === "ks") {
@@ -182,7 +176,6 @@ export default {
           } else {
             return match[0] + 1 + match[1];
           }
-
         } else if (match.length === 3) {
           if (match[0] === 'r') {
             return (match[0] + 1 + match[1] + match[2])
@@ -196,19 +189,25 @@ export default {
 
       function isVowel(string) {
         if ("aeiouäöy".indexOf(string[0]) != -1) {
-          string = "0" + string;
+          string = "0" + string
         }
         return string;
       }
 
+      console.log(string)
+
       let newStr = string
         .replace(/\s/g, "")
-        .replace(doubleVowelReg, addtoVowel)
-        .replace(consReg, addIfConsonant)
+        .replace(/[aeiouäöy]{2,}/gi, addtoVowel)
+        .replace(/[^aeiouäöy]{2,}/gi, addIfConsonant)
         .replace(/j/g, "0j")
-        .replace(/v/g, "0v");
+        .replace(/v/g, "0v")
+        .replace(/[s]$/, "s1")
+        
 
-      return this.consonantTampering(isVowel(newStr));
+      console.log(newStr)
+
+      return this.stringSplit(isVowel(newStr));
     },
     changeText() {
       let hangulArray = [];
