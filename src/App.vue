@@ -76,7 +76,10 @@ export default {
         kk: "ㄲ",
         tt: "ㄸ",
         pp: "ㅃ",
-        ss: "ㅆ"
+        ss: "ㅆ",
+        rr: "ㄹ",
+        "-": "-",
+        " ": " "
       }
     };
   },
@@ -151,6 +154,10 @@ export default {
         if (match.length == 2) {
           if (match[0] === match[1]) {
             return match;
+          } else if (match[0] === "t" && match[1] === "j") {
+            return match[0] + 1 + 0 + match[1];
+          } else if (match[0] === "t" && match[1] === "v") {
+            return match[0] + 1 + 0 + match[1];
           } else if (match[0] === "r" && match[1] === "j") {
             return match[0] + 1 + 0 + match[1];
           } else if (match[0] === "r" && match[1] === "v") {
@@ -187,6 +194,14 @@ export default {
         }
       }
 
+      function addIfVJ(match) {
+        return (match[0] + 0 + match[1]) 
+      }
+
+      function addIfL(match) {
+        return (match[0] + 'l' + match[1] + match[2])
+      }
+
       function isVowel(string) {
         if ("aeiouäöy".indexOf(string[0]) != -1) {
           string = "0" + string
@@ -196,13 +211,15 @@ export default {
 
       console.log(string)
 
-      let newStr = string
-        .replace(/\s/g, "")
+      let newStr = string        
         .replace(/[aeiouäöy]{2,}/gi, addtoVowel)
-        .replace(/[^aeiouäöy]{2,}/gi, addIfConsonant)
-        .replace(/j/g, "0j")
-        .replace(/v/g, "0v")
+        .replace(/[bcdfghjklmnpqrstvwxz]{2,}/gi, addIfConsonant)
+        .replace(/[aeiouäöy][jv]/g, addIfVJ)
+        .replace(/[aeiouäöy][l][aeiouäöy]/, addIfL)
         .replace(/[s]$/, "s1")
+        .replace(/[r]$/, "r1")
+        .replace(/^[j]/, "0j")
+        .replace(/^[v]/, "0v")
         
 
       console.log(newStr)
